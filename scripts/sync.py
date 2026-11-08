@@ -55,7 +55,20 @@ def sync_one(root, spec, fetch=download):
     previous = path.read_bytes() if path.exists() else None
     try:
         data = fetch(spec['url'])
-        count = validate(data, spec, previous)
+        validate(data, spec)
+        pinned = spec.get('pinned_rules', [])
+        if pinned:
+            # Validate upstream before merging, so empty/error pages cannot be masked.
+            upstream = [x.strip() for x in data.decode('utf-8-sig').splitlines()
+                        if x.strip() and not x.strip().startswith(('#', ';', '//'))]
+            pinned_domains = {x.split(',')[1] for x in pinned}
+            additions = [x for x in upstream if x.split(',')[1] not in pinned_domains]
+            data = ('# Apple AI: user-provided eight-rule baseline; upstream additions are validated separately.\n'
+                    + '\n'.join(dict.fromkeys(pinned + additions)) + '\n').encode()
+            output_spec = {**spec, 'min_rules': len(pinned), 'required_rules': pinned}
+        else:
+            output_spec = spec
+        count = validate(data, output_spec, previous)
         if previous != data:
             tmp = path.with_name(path.name + '.tmp')
             tmp.write_bytes(data)

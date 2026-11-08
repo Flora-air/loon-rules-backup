@@ -47,4 +47,20 @@ class RetentionTests(unittest.TestCase):
             self.assertEqual(sync_one(Path(d), SPEC, lambda _: b'')['state'], 'unavailable')
             self.assertFalse((Path(d) / SPEC['path']).exists())
 
+    def test_real_eight_rule_baseline_survives_five_rule_upstream(self):
+        manifest = json.loads((Path(__file__).resolve().parents[1] / 'sources.json').read_text())
+        spec = manifest['files'][0]
+        five = b'DOMAIN,apple-relay.apple.com\nDOMAIN,apple-relay.cloudflare.com\nDOMAIN,apple-relay.fastly-edge.com\nDOMAIN,cp4.cloudflare.com\nDOMAIN,gspe1-ssl.ls.apple.com\n'
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            result = sync_one(root, spec, lambda _: five)
+            self.assertEqual(result['rules'], 8)
+            before = (root / spec['path']).read_bytes()
+            self.assertEqual([x for x in before.decode().splitlines() if not x.startswith('#')], spec['pinned_rules'])
+            self.assertEqual(sync_one(root, spec, lambda _: five)['state'], 'unchanged')
+            self.assertEqual(sync_one(root, spec, lambda _: b'')['state'], 'retained')
+            self.assertEqual((root / spec['path']).read_bytes(), before)
+            extra = five + b'DOMAIN,new.example.com\n'
+            self.assertEqual(sync_one(root, spec, lambda _: extra)['rules'], 9)
+
 if __name__ == '__main__': unittest.main()

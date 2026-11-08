@@ -10,10 +10,13 @@
 
 ## 来源与范围
 
-原 HiMyCocoo/Loon 已于设置时返回 404，未找到可确认的完整 fork；本仓库不能恢复其已经丢失的文件或 Git 历史。
-当前 `Apple AI.lsr` 是现存 [angribot/rules 的 AppleIntelligence.lsr](https://github.com/angribot/rules/blob/main/AppleIntelligence.lsr) 的逐字备份，仅沿用方便迁移的文件名，不声称是 HiMyCocoo 原版。
-Copyright (C) 2024 Civi；上游采用 GNU AGPL v3 或更新版本，完整许可见 LICENSE。原始注释保留。
-本仓库同步脚本和测试亦采用 AGPL-3.0-or-later。
+2026-11-08 修正：`Apple AI.lsr` 以用户提供的八条 `DOMAIN-SUFFIX` 规则为固定基线，保存于 sources.json 的 pinned_rules。用户提供的截图将其描述为原文件内容；本仓库未独立核实该缓存来源，不声称恢复了原仓库历史。
+
+每日继续检查 [angribot/rules 的 AppleIntelligence.lsr](https://github.com/angribot/rules/blob/main/AppleIntelligence.lsr)：先独立校验下载内容，再合并新增域名。同域名始终保留基线的 DOMAIN-SUFFIX，不会被上游的 DOMAIN 缩窄。即使上游只包含五条，八条基线也不会丢失。上游下载或校验失败时保留整个最后可用文件。
+
+上游规则 Copyright (C) 2024 Civi，采用 GNU AGPL v3 或更新版本，完整许可见 LICENSE。本仓库脚本亦采用 AGPL-3.0-or-later。订阅文件是合并后的派生版本，已在 2026-11-08 修改。
+
+.lsr 远程规则文件只含规则行和注释；用户粘贴的 `[Rule]` 是配置节标题，不写入远程规则文件。
 
 只同步 sources.json 明确列出的文件。其他原订阅尚未提供，因此没有随意替换其内容；新增规则需指定并核对来源及对应校验器。
 
