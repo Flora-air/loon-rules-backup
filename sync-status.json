@@ -1,11 +1,11 @@
 {
-  "checked_at": "2026-11-08T10:50:05.036250+00:00",
+  "checked_at": "2026-11-08T10:53:39.417366+00:00",
   "files": {
     "Apple AI.lsr": {
       "source": "https://raw.githubusercontent.com/angribot/rules/main/AppleIntelligence.lsr",
       "state": "unchanged",
-      "rules": 5,
-      "sha256": "78fe0b7cd84361eed992767d8b3456bce28540dfc8c41de31bf72d44e4dd4313"
+      "rules": 8,
+      "sha256": "920829389f888584b2ad3688d8dce03a394ac15216235d87366f95c73637337e"
     }
   }
 }
