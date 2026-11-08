@@ -1,0 +1,14 @@
+{
+  "files": [
+    {
+      "path": "Apple AI.lsr",
+      "url": "https://raw.githubusercontent.com/angribot/rules/main/AppleIntelligence.lsr",
+      "min_rules": 5,
+      "required_rules": [
+        "DOMAIN,apple-relay.apple.com",
+        "DOMAIN,apple-relay.cloudflare.com",
+        "DOMAIN,apple-relay.fastly-edge.com"
+      ]
+    }
+  ]
+}
